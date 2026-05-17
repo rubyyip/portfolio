@@ -1,0 +1,1176 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>叶咏婷 · Portfolio</title>
+
+<!-- 苹方字体（系统自带）+ Flama 用 Barlow Condensed 兜底 -->
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@300;400;500;600;700;800;900&family=Barlow:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+/* ==========================================
+   VIEWPORT BASE — MANDATORY
+   ========================================== */
+html, body {
+  height: 100%;
+  overflow-x: hidden;
+}
+html {
+  scroll-snap-type: y mandatory;
+  scroll-behavior: smooth;
+}
+.slide {
+  width: 100vw;
+  height: 100vh;
+  height: 100dvh;
+  overflow: hidden;
+  scroll-snap-align: start;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+.slide-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  max-height: 100%;
+  overflow: hidden;
+  padding: var(--slide-padding);
+}
+:root {
+  --title-size:   clamp(2rem,   6vw,  5.5rem);
+  --h2-size:      clamp(1.4rem, 3.5vw, 2.8rem);
+  --h3-size:      clamp(1rem,   2.2vw, 1.6rem);
+  --body-size:    clamp(0.78rem,1.4vw, 1.05rem);
+  --small-size:   clamp(0.75rem,0.9vw, 0.85rem);
+  --slide-padding:clamp(2rem,   5vw,   5rem);
+  --content-gap:  clamp(0.6rem, 1.8vw, 1.8rem);
+  --element-gap:  clamp(0.3rem, 0.8vw, 0.8rem);
+
+  /* === COLOR PALETTE === */
+  --white:   #FFFFFF;
+  --lgray:   #EBEBEB;
+  --black:   #0A0A0A;
+  --blue:    #12B5E4;
+  --yellow:  #FFC933;
+  --red:     #FF4136;
+
+  /* === FONTS === */
+  /* 中文：苹方；英文/数字：Barlow Condensed (Flama-like) */
+  --font-cn: "PingFang SC", "苹方-简", "PingFang-SC-Regular", sans-serif;
+  --font-en: "Barlow Condensed", sans-serif;
+  --font-body: "Barlow", "PingFang SC", sans-serif;
+
+  /* === EASING === */
+  --ease-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}
+img, .image-container { max-width:100%; max-height:min(50vh,400px); object-fit:contain; }
+@media (max-height: 700px) {
+  :root { --slide-padding:clamp(1rem,3vw,2.5rem); --title-size:clamp(1.5rem,5vw,3.5rem); --h2-size:clamp(1.1rem,3vw,2rem); }
+}
+@media (max-height: 600px) {
+  :root { --slide-padding:clamp(0.8rem,2.5vw,1.5rem); --body-size:clamp(0.65rem,1.1vw,0.9rem); }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration:0.01ms !important; transition-duration:0.2s !important; }
+  html { scroll-behavior: auto; }
+}
+
+/* ==========================================
+   GLOBAL RESET & BASE
+   ========================================== */
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+body { background: var(--white); color: var(--black); font-family: var(--font-body); }
+
+/* ==========================================
+   TYPOGRAPHY HELPERS
+   ========================================== */
+.t-en   { font-family: var(--font-en); letter-spacing: 0.02em; }
+.t-cn   { font-family: var(--font-cn); }
+.t-num  { font-family: var(--font-en); font-weight: 700; }
+
+/* ==========================================
+   NAV DOTS
+   ========================================== */
+#nav-dots {
+  position: fixed;
+  right: clamp(16px, 3vw, 36px);
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.dot {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: var(--lgray);
+  cursor: pointer;
+  transition: background 0.25s, transform 0.25s;
+}
+.dot.active { background: var(--black); transform: scale(1.4); }
+
+/* ==========================================
+   SLIDE COUNTER
+   ========================================== */
+.slide-num {
+  position: absolute;
+  bottom: clamp(16px, 3vh, 32px);
+  right: clamp(20px, 4vw, 48px);
+  font-family: var(--font-en);
+  font-size: var(--small-size);
+  font-weight: 500;
+  color: #999;
+  letter-spacing: 0.15em;
+}
+
+/* ==========================================
+   REVEAL ANIMATIONS
+   ========================================== */
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.7s var(--ease-expo), transform 0.7s var(--ease-expo);
+}
+.slide.visible .reveal { opacity: 1; transform: translateY(0); }
+.d1 { transition-delay: 0.08s; }
+.d2 { transition-delay: 0.18s; }
+.d3 { transition-delay: 0.28s; }
+.d4 { transition-delay: 0.38s; }
+.d5 { transition-delay: 0.48s; }
+.d6 { transition-delay: 0.58s; }
+.reveal-left {
+  opacity: 0;
+  transform: translateX(-40px);
+  transition: opacity 0.65s var(--ease-expo), transform 0.65s var(--ease-expo);
+}
+.slide.visible .reveal-left { opacity:1; transform:translateX(0); }
+
+/* ==========================================
+   COLOR ACCENT BARS
+   ========================================== */
+.bar-blue   { background: var(--blue); }
+.bar-yellow { background: var(--yellow); }
+.bar-red    { background: var(--red); }
+.bar-lgray  { background: var(--lgray); }
+.text-blue   { color: var(--blue); }
+.text-yellow { color: var(--yellow); }
+.text-red    { color: var(--red); }
+
+/* ==========================================
+   SLIDE 1 — 个人介绍
+   ========================================== */
+#s1 {
+  background: var(--white);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr auto;
+}
+.s1-left {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: var(--slide-padding);
+  padding-right: calc(var(--slide-padding) * 0.7);
+}
+.s1-top-label {
+  font-family: var(--font-en);
+  font-size: var(--small-size);
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #aaa;
+}
+.s1-name {
+  font-family: var(--font-en);
+  font-size: clamp(3.5rem, 10vw, 9rem);
+  font-weight: 900;
+  line-height: 0.88;
+  letter-spacing: -0.02em;
+  color: var(--black);
+  text-transform: uppercase;
+}
+.s1-name-cn {
+  font-family: var(--font-cn);
+  font-size: clamp(1rem, 2vw, 1.5rem);
+  font-weight: 300;
+  letter-spacing: 0.4em;
+  color: #888;
+  margin-top: 0.5em;
+}
+.s1-bio {
+  font-family: var(--font-cn);
+  font-size: var(--body-size);
+  line-height: 1.85;
+  color: #444;
+  max-width: 420px;
+}
+.s1-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4em;
+}
+.s1-meta-item {
+  display: flex;
+  align-items: center;
+  gap: 0.7em;
+  font-size: var(--small-size);
+}
+.s1-meta-item .meta-key {
+  font-family: var(--font-en);
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #bbb;
+  min-width: 70px;
+}
+.s1-meta-item .meta-val {
+  font-family: var(--font-cn);
+  color: var(--black);
+  font-weight: 500;
+}
+
+/* Right side — color block grid */
+.s1-right {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+}
+.s1-cb {
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-start;
+  padding: clamp(16px, 2.5vw, 28px);
+}
+.s1-cb span {
+  font-family: var(--font-en);
+  font-size: var(--small-size);
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+.s1-cb.blue   { background: var(--blue); }
+.s1-cb.yellow { background: var(--yellow); }
+.s1-cb.red    { background: var(--red); }
+.s1-cb.lgray  { background: var(--lgray); }
+.s1-cb.blue span, .s1-cb.red span   { color: #fff; }
+.s1-cb.yellow span, .s1-cb.lgray span { color: var(--black); }
+
+/* Bottom stat bar */
+.s1-stats {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  border-top: 1.5px solid var(--lgray);
+}
+.s1-stat {
+  padding: clamp(16px, 2.5vh, 28px) var(--slide-padding);
+  border-right: 1.5px solid var(--lgray);
+}
+.s1-stat:last-child { border-right: none; }
+.s1-stat-num {
+  font-family: var(--font-en);
+  font-size: clamp(1.8rem, 4vw, 3.2rem);
+  font-weight: 800;
+  line-height: 1;
+}
+.s1-stat-label {
+  font-family: var(--font-cn);
+  font-size: var(--small-size);
+  color: #888;
+  margin-top: 0.3em;
+  letter-spacing: 0.05em;
+}
+
+/* ==========================================
+   SLIDE 2 — 个人亮点 + 工作经历
+   ========================================== */
+#s2 { background: var(--white); }
+.s2-header {
+  padding: clamp(24px, 4vh, 48px) var(--slide-padding) 0;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+}
+.s2-title {
+  font-family: var(--font-en);
+  font-size: var(--h2-size);
+  font-weight: 900;
+  text-transform: uppercase;
+  line-height: 1;
+}
+.s2-section-label {
+  font-family: var(--font-en);
+  font-size: var(--small-size);
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #bbb;
+}
+.s2-body {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+  padding: clamp(16px, 2.5vh, 32px) var(--slide-padding);
+  overflow: hidden;
+}
+/* Highlights col */
+.s2-highlights { padding-right: clamp(16px, 3vw, 40px); }
+.s2-hl-label {
+  font-family: var(--font-en);
+  font-size: var(--small-size);
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #bbb;
+  margin-bottom: 0.8em;
+}
+.hl-item {
+  display: flex;
+  gap: 0.8em;
+  margin-bottom: clamp(10px, 1.5vh, 18px);
+  align-items: flex-start;
+}
+.hl-dot {
+  width: clamp(8px, 1vw, 12px);
+  height: clamp(8px, 1vw, 12px);
+  border-radius: 50%;
+  flex-shrink: 0;
+  margin-top: 0.3em;
+}
+.hl-text {
+  font-family: var(--font-cn);
+  font-size: var(--body-size);
+  line-height: 1.7;
+  color: #333;
+}
+/* Experience col */
+.s2-exp { border-left: 1.5px solid var(--lgray); padding-left: clamp(16px, 3vw, 40px); }
+.exp-item {
+  margin-bottom: clamp(12px, 2vh, 24px);
+  padding-bottom: clamp(12px, 2vh, 24px);
+  border-bottom: 1px solid var(--lgray);
+}
+.exp-item:last-child { border-bottom: none; margin-bottom: 0; }
+.exp-period {
+  font-family: var(--font-en);
+  font-size: var(--small-size);
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  color: #bbb;
+  margin-bottom: 0.3em;
+}
+.exp-co {
+  font-family: var(--font-cn);
+  font-size: var(--body-size);
+  font-weight: 700;
+  color: var(--black);
+  margin-bottom: 0.25em;
+}
+.exp-role-tag {
+  display: inline-block;
+  padding: 2px 8px;
+  font-family: var(--font-cn);
+  font-size: var(--small-size);
+  font-weight: 500;
+  color: #fff;
+  margin-bottom: 0.4em;
+}
+.exp-desc {
+  font-family: var(--font-cn);
+  font-size: var(--small-size);
+  line-height: 1.65;
+  color: #555;
+}
+
+/* ==========================================
+   SLIDE 3 — 重点项目一（售后体验升级）
+   ========================================== */
+#s3 {
+  background: var(--white);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+.proj-left {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 24px;
+  padding: clamp(16px, 3vh, 40px) var(--slide-padding);
+  padding-right: calc(var(--slide-padding) * 0.7);
+  overflow: hidden;
+}
+.proj-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-en);
+  font-size: var(--small-size);
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #bbb;
+}
+.proj-eyebrow-bar {
+  width: 28px; height: 3px;
+  flex-shrink: 0;
+}
+.proj-subtitle {
+  font-family: var(--font-cn);
+  font-size: var(--small-size);
+  font-weight: 500;
+  color: #999;
+  letter-spacing: 0.08em;
+  margin-bottom: 0.15em;
+}
+.proj-title {
+  font-family: var(--font-cn);
+  font-size: clamp(1.2rem, 2.8vw, 2.2rem);
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+}
+.proj-section-label {
+  font-family: var(--font-cn);
+  font-size: var(--small-size);
+  font-weight: 700;
+  color: #999;
+  letter-spacing: 0.08em;
+  margin-top: 12px;
+  margin-bottom: 0.15em;
+}
+.proj-section-label.highlight { color: var(--black); }
+.proj-desc {
+  font-family: var(--font-cn);
+  font-size: var(--small-size);
+  line-height: 1.72;
+  color: #666;
+}
+/* 难点与解法整体容器 — 撑满剩余高度 */
+.proj-challenge-wrap {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  background: transparent;
+  padding: 0;
+  overflow: hidden;
+  margin-top: 12px;
+}
+.proj-challenge-wrap .proj-section-label {
+  margin-top: 0;
+  margin-bottom: 0.15em;
+  font-size: var(--small-size);
+  color: var(--black);
+  letter-spacing: 0.06em;
+}
+.proj-challenge {
+  font-family: var(--font-cn);
+  font-size: var(--small-size);
+  line-height: 1.65;
+  color: #333;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 0;
+  overflow: hidden;
+  min-height: 0;
+}
+.proj-challenge-item {
+  display: block;
+  padding: 6px 0;
+  border-bottom: 1px solid #e0e0e0;
+  font-size: var(--small-size);
+  line-height: 1.72;
+  flex-shrink: 0;
+}
+.proj-challenge-item strong {
+  font-size: 15px;
+  color: var(--black);
+  display: block;
+  font-weight: 700;
+  line-height: 1.45;
+  padding-left: 1.6em;
+  text-indent: -1.6em;
+}
+.proj-challenge-body {
+  display: block;
+  margin-top: 0.15em;
+  padding-left: 1.6em;
+}
+.proj-challenge-item:last-child { border-bottom: none; }
+.p-tag {
+  padding: 4px 12px;
+  font-family: var(--font-en);
+  font-size: var(--small-size);
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  border: 1.5px solid var(--black);
+}
+.p-tag.blue   { background: var(--blue);   color: #fff; border-color: var(--blue); }
+.p-tag.yellow { background: var(--yellow);  color: #000; border-color: var(--yellow); }
+.p-tag.red    { background: var(--red);     color: #fff; border-color: var(--red); }
+.proj-metrics {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  border: 1.5px solid var(--lgray);
+}
+.pm {
+  padding: clamp(6px, 1vh, 12px) clamp(8px, 1vw, 14px);
+  border-right: 1.5px solid var(--lgray);
+}
+.pm:last-child { border-right: none; }
+.pm-val {
+  font-family: var(--font-en);
+  font-size: clamp(1rem, 2vw, 1.6rem);
+  font-weight: 800;
+  line-height: 1;
+}
+.pm-key {
+  font-family: var(--font-cn);
+  font-size: calc(var(--small-size) * 0.88);
+  color: #888;
+  margin-top: 3px;
+  white-space: nowrap;
+}
+
+/* Right — full-height visual area */
+.proj-right {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.proj-visual {
+  flex: 1;
+  background: var(--lgray);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+.proj-visual::before {
+  content: '';
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(var(--black) 1px, transparent 1px),
+    linear-gradient(90deg, var(--black) 1px, transparent 1px);
+  background-size: 36px 36px;
+  opacity: 0.05;
+}
+.pv-grid {
+  position: relative; z-index: 1;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  width: min(240px, 30vw);
+  height: min(240px, 30vw);
+}
+.pv-cell { width: 100%; height: 100%; }
+
+.proj-details {
+  padding: clamp(16px, 2.5vh, 28px) var(--slide-padding);
+  border-top: 1.5px solid var(--lgray);
+  overflow: hidden;
+}
+.detail-list { list-style: none; }
+.detail-list li {
+  display: flex;
+  gap: 10px;
+  padding: 6px 0;
+  border-bottom: 1px solid var(--lgray);
+  font-family: var(--font-cn);
+  font-size: var(--small-size);
+  line-height: 1.65;
+  color: #333;
+}
+.detail-list li:last-child { border-bottom: none; }
+.detail-list li::before {
+  content: '→';
+  font-family: var(--font-en);
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+/* ==========================================
+   SLIDE 4 — 重点项目二（收银台）
+   ========================================== */
+#s4 {
+  background: var(--white);
+  color: var(--black);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+/* ==========================================
+   SLIDE 5 — 其他两个项目
+   ========================================== */
+#s5 { background: var(--white); }
+.s5-header {
+  padding: clamp(24px, 4vh, 48px) var(--slide-padding) 0;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+}
+.s5-title {
+  font-family: var(--font-en);
+  font-size: var(--h2-size);
+  font-weight: 900;
+  text-transform: uppercase;
+  line-height: 1;
+}
+.s5-cards {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  padding: clamp(16px, 3vh, 36px) var(--slide-padding);
+  gap: clamp(16px, 2.5vw, 32px);
+  overflow: hidden;
+}
+.s5-card {
+  border: 1.5px solid var(--lgray);
+  padding: clamp(16px, 2.5vw, 32px);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+  transition: border-color 0.2s;
+}
+.s5-card:hover { border-color: var(--blue); }
+.s5-card-num {
+  font-family: var(--font-en);
+  font-size: clamp(3.5rem, 8vw, 7rem);
+  font-weight: 900;
+  line-height: 1;
+  opacity: 0.06;
+  position: absolute;
+  top: 12px; right: 16px;
+  pointer-events: none;
+}
+.s5-stripe { height: 5px; width: 40px; margin-bottom: clamp(12px, 2vh, 24px); }
+.s5-card-title {
+  font-family: var(--font-cn);
+  font-size: var(--h3-size);
+  font-weight: 700;
+  line-height: 1.2;
+  margin-bottom: clamp(8px, 1.2vh, 16px);
+}
+.s5-card-desc {
+  font-family: var(--font-cn);
+  font-size: var(--body-size);
+  line-height: 1.78;
+  color: #555;
+  flex: 1;
+}
+.s5-card-metrics {
+  display: flex;
+  gap: clamp(12px, 2vw, 24px);
+  margin-top: clamp(10px, 1.5vh, 20px);
+  padding-top: clamp(10px, 1.5vh, 20px);
+  border-top: 1px solid var(--lgray);
+  flex-wrap: wrap;
+}
+.s5-metric {}
+.s5-metric-val {
+  font-family: var(--font-en);
+  font-size: clamp(1.2rem, 2.5vw, 1.8rem);
+  font-weight: 800;
+  line-height: 1;
+}
+.s5-metric-key {
+  font-family: var(--font-cn);
+  font-size: var(--small-size);
+  color: #888;
+  margin-top: 2px;
+}
+.s5-tags { display: flex; flex-wrap: wrap; gap: 5px; margin-top: clamp(8px, 1.2vh, 16px); }
+.s5-tag {
+  padding: 3px 9px;
+  font-family: var(--font-en);
+  font-size: var(--small-size);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  border: 1.5px solid var(--lgray);
+  color: #666;
+}
+
+/* ==========================================
+   FOOTER / OUTRO (part of s5)
+   ========================================== */
+.s5-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: clamp(12px, 2vh, 20px) var(--slide-padding);
+  border-top: 1.5px solid var(--lgray);
+  background: var(--black);
+  color: var(--white);
+}
+.s5-footer-name {
+  font-family: var(--font-en);
+  font-size: var(--small-size);
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+.s5-footer-right {
+  font-family: var(--font-cn);
+  font-size: var(--small-size);
+  color: #666;
+}
+
+</style>
+</head>
+<body>
+
+<!-- ── NAV DOTS ── -->
+<div id="nav-dots">
+  <div class="dot active" data-target="0"></div>
+  <div class="dot" data-target="1"></div>
+  <div class="dot" data-target="2"></div>
+  <div class="dot" data-target="3"></div>
+  <div class="dot" data-target="4"></div>
+</div>
+
+<!-- ════════════════════════════════════════
+     SLIDE 1 · 个人介绍
+════════════════════════════════════════ -->
+<section class="slide" id="s1">
+
+  <div class="s1-left">
+    <div class="s1-top-label reveal">Product Designer · Meituan</div>
+
+    <div>
+      <div class="s1-name reveal d1">YE<br>YONG<br>TING</div>
+      <div class="s1-name-cn reveal d2">叶咏婷</div>
+    </div>
+
+    <p class="s1-bio reveal d3">
+      在零售领域深耕 5 年，负责小象超市、快乐猴、美团优选线上商城及线下门店终端的全链路体验设计，助力 220+ 项目获得访购率与销售额的正向增长。持续探索 AI 在竞品分析、用户研究等设计工作流中的应用。
+    </p>
+
+    <div class="s1-meta reveal d4">
+      <div class="s1-meta-item">
+        <span class="meta-key">Age</span>
+        <span class="meta-val">30 岁</span>
+      </div>
+      <div class="s1-meta-item">
+        <span class="meta-key">Level</span>
+        <span class="meta-val">设计 L8</span>
+      </div>
+      <div class="s1-meta-item">
+        <span class="meta-key">Contact</span>
+        <span class="meta-val">18819454508</span>
+      </div>
+      <div class="s1-meta-item">
+        <span class="meta-key">Email</span>
+        <span class="meta-val">rubyyip95@163.com</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="s1-right">
+    <div class="s1-cb blue"><span>AI Design</span></div>
+    <div class="s1-cb yellow"><span>0 → 1</span></div>
+    <div class="s1-cb red"><span>220+ 项目</span></div>
+    <div class="s1-cb lgray"><span>L8 设计师</span></div>
+  </div>
+
+  <div class="s1-stats">
+    <div class="s1-stat reveal d2">
+      <div class="s1-stat-num text-blue">8<span style="font-size:0.5em;font-weight:500">年</span></div>
+      <div class="s1-stat-label">工作经验</div>
+    </div>
+    <div class="s1-stat reveal d3">
+      <div class="s1-stat-num text-yellow">5<span style="font-size:0.5em;font-weight:500">年</span></div>
+      <div class="s1-stat-label">加入美团</div>
+    </div>
+    <div class="s1-stat reveal d4">
+      <div class="s1-stat-num text-red">220<span style="font-size:0.4em;font-weight:500">+</span></div>
+      <div class="s1-stat-label">主导项目</div>
+    </div>
+  </div>
+
+  <div class="slide-num">01 / 05</div>
+</section>
+
+
+<!-- ════════════════════════════════════════
+     SLIDE 2 · 个人亮点 + 工作经历
+════════════════════════════════════════ -->
+<section class="slide" id="s2">
+
+  <div class="s2-header">
+    <h2 class="s2-title reveal">Highlights<br><span style="color:var(--blue)">& Experience</span></h2>
+    <span class="s2-section-label">02</span>
+  </div>
+
+  <div class="s2-body">
+    <!-- 个人亮点 -->
+    <div class="s2-highlights">
+      <div class="s2-hl-label reveal">个人亮点</div>
+
+      <div class="hl-item reveal d1">
+        <div class="hl-dot" style="background:var(--blue)"></div>
+        <div class="hl-text">在<strong>零售领域深耕 5 年</strong>，在小象超市、快乐猴、美团优选等千万级 DAU 业务中，负责线上商城及线下门店终端的全链路体验设计，助力 <strong>220+ 项目</strong>获得访购率、销售额的正向增长。</div>
+      </div>
+
+      <div class="hl-item reveal d2">
+        <div class="hl-dot" style="background:var(--yellow)"></div>
+        <div class="hl-text">对零售用户有<strong>深度理解</strong>，能从用户行为中解读真实动机，辅助方案判断。主导 <strong>10+ 次</strong>用户研究，线下直接接触用户 <strong>270+ 人</strong>、间接接触 <strong>1200+ 人</strong>，研究结论多次支撑产品规划与决策。</div>
+      </div>
+
+      <div class="hl-item reveal d3">
+        <div class="hl-dot" style="background:var(--red)"></div>
+        <div class="hl-text">持续探索 <strong>AI 在设计工作流中的应用</strong>，推动 AI 竞品分析、AI 用户研究等多项提效实践。</div>
+      </div>
+    </div>
+
+    <!-- 工作经历 -->
+    <div class="s2-exp">
+      <div class="s2-hl-label reveal">工作经历</div>
+
+      <div class="exp-item reveal d1">
+        <div class="exp-period">2025.06 — 至今</div>
+        <div class="exp-co">小象超市及快乐猴用户端</div>
+        <div><span class="exp-role-tag bar-blue">产品设计师</span></div>
+        <div class="exp-desc">同时推进线上商城与线下门店两条业务线：线上负责小象超市选购链路升级，助力业务精细化运营；线下主导门店收银设备界面设计，推动小象超市及快乐猴门店终端 0-1 建设及落地。</div>
+      </div>
+
+      <div class="exp-item reveal d2">
+        <div class="exp-period">2021.07 — 2025.06</div>
+        <div class="exp-co">美团优选用户端</div>
+        <div><span class="exp-role-tag bar-yellow" style="color:#000">产品设计师</span></div>
+        <div class="exp-desc">作为团队核心设计师，围绕线上商城「购物前-中-后」全链路进行设计，助力业务访购率、销售额持续增长。</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="slide-num">02 / 05</div>
+</section>
+
+
+<!-- ════════════════════════════════════════
+     SLIDE 3 · 重点项目一 · 售后体验升级
+════════════════════════════════════════ -->
+<section class="slide" id="s3">
+
+  <div class="proj-left">
+
+    <!-- eyebrow -->
+    <div class="proj-eyebrow reveal">
+      <div class="proj-eyebrow-bar bar-red"></div>
+      重点项目 01
+    </div>
+
+    <!-- 副标题 + P0 项目名称（同组，间距紧凑） -->
+    <div>
+      <div class="proj-subtitle reveal d1">美团优选用户端</div>
+      <div class="proj-title reveal d1">线上商城售后体验升级</div>
+    </div>
+
+    <!-- P3 业务背景与产品现状 -->
+    <div>
+      <div class="proj-section-label reveal d2">业务背景与产品现状</div>
+      <p class="proj-desc reveal d2">
+        退款体验是美团优选用户满意度的核心短板，满意度排名倒数第4，评分低于竞品。TOP3 客诉：咨询退款进度（月均3.9万次）、找人工发起退款（3.3万次）、申请失败咨询（3.2万次），万订单人工服务率合计 2.62。
+      </p>
+    </div>
+
+    <!-- P3 项目目标 -->
+    <div>
+      <div class="proj-section-label reveal d2">项目目标</div>
+      <p class="proj-desc reveal d2">
+        系统性改造退款全链路，覆盖找入口、退款申请、退款进度跟踪 3 个核心环节，让用户清晰、顺利、不费力地完成售后，提升用户退款满意度，降低人工进线成本。
+      </p>
+    </div>
+
+    <!-- P2 项目成果（标签 + 数据格子同组，只占一个 gap 槽） -->
+    <div>
+      <div class="proj-section-label reveal d3">项目成果</div>
+      <div class="proj-metrics reveal d3">
+      <div class="pm">
+        <div class="pm-val text-blue">+12pp</div>
+        <div class="pm-key">退款发起成功率最高</div>
+      </div>
+      <div class="pm">
+        <div class="pm-val text-yellow">+9.02pp</div>
+        <div class="pm-key">售后满意度</div>
+      </div>
+      <div class="pm">
+        <div class="pm-val text-red">−22万</div>
+        <div class="pm-key">人工服务成本/月</div>
+      </div>
+      </div>
+    </div>
+
+    <!-- P1 难点与解法（完整，撑满剩余空间） -->
+    <div class="proj-challenge-wrap reveal d4">
+      <div class="proj-section-label highlight">难点与解法</div>
+      <div class="proj-challenge">
+        <div class="proj-challenge-item"><strong>1）在复杂售后场景下，售后规则透出越完整，用户越看不懂——需要规则转译为用户可理解的语言，在正确节点传递正确信息，而非全量推给用户。</strong><span class="proj-challenge-body">通过建立全流程规则透出框架、识别用户最焦虑的节点、针对性做差异化设计，降低用户门槛、帮助用户理解平台规则。例如：美团优选售后规则，送达前以可视化图表形式展示、送达后以保障形式展示。</span></div>
+        <div class="proj-challenge-item"><strong>2）用户对售后结果的满意度，更多取决于过程中的情绪体验，而不只是结果本身——需要安抚用户情绪，而非仅做基础功能优化。</strong><span class="proj-challenge-body">通过拆解退款全流程的情绪曲线，定位用户情绪低谷节点，针对性地用情感化文案、情绪出口设计、动效反馈等手段，在结果不变的前提下，让用户感受到"事情在推进、平台在处理"，缓解焦虑、提升满意度。由于美团优选业务关停，当前在小象超市业务探索中。</span></div>
+        <div class="proj-challenge-item"><strong>3）售后表单填写门槛高，传统填写流程优化空间有限——需要探索AI应用，构建新路径。</strong><span class="proj-challenge-body">通过引入AI识别用户照片、AI自动填充表单等方式，帮助用户更低门槛的完成售后申请。由于美团优选业务关停，当前在小象超市业务探索中。</span></div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- 右侧：方案图片区域（全高） -->
+  <div class="proj-right">
+    <div class="proj-visual">
+      <div class="pv-grid">
+        <div class="pv-cell bar-red"></div>
+        <div class="pv-cell bar-blue"></div>
+        <div class="pv-cell bar-yellow"></div>
+        <div class="pv-cell bar-lgray"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="slide-num">03 / 05</div>
+</section>
+
+
+<!-- ════════════════════════════════════════
+     SLIDE 4 · 重点项目二 · AI 购物助手
+════════════════════════════════════════ -->
+<section class="slide" id="s4">
+
+  <div class="proj-left">
+
+    <!-- eyebrow -->
+    <div class="proj-eyebrow reveal">
+      <div class="proj-eyebrow-bar bar-blue"></div>
+      重点项目 02
+    </div>
+
+    <!-- 副标题 + P0 项目名称（同组，间距紧凑） -->
+    <div>
+      <div class="proj-subtitle reveal d1">美团优选用户端</div>
+      <div class="proj-title reveal d1">美团优选 AI 购物助手</div>
+    </div>
+
+    <!-- P3 业务背景与产品现状 -->
+    <div>
+      <div class="proj-section-label reveal d2">业务背景与产品现状</div>
+      <p class="proj-desc reveal d2">
+        村镇用户普遍存在「不会打字、找品难」的痛点，导致购物门槛高、找不到想买的商品，既影响用户体验，也制约了销售转化。产品处于 AI 能力 0→1 探索阶段，需要在技术可行性与用户接受度之间找到平衡。
+      </p>
+    </div>
+
+    <!-- P3 项目目标 -->
+    <div>
+      <div class="proj-section-label reveal d2">项目目标</div>
+      <p class="proj-desc reveal d2">
+        探索用 AI 构建更简单高效的购物流程，让用户在全链路中找得到、看得懂、买得顺。借助 AI 能力优化购物全链路，帮用户低门槛完成找品、决策、下单全流程，提升访购转化，带动销售增量。
+      </p>
+    </div>
+
+    <!-- P2 项目成果（标签 + 数据格子同组） -->
+    <div>
+      <div class="proj-section-label reveal d3">项目成果</div>
+      <div class="proj-metrics reveal d3">
+        <div class="pm">
+          <div class="pm-val text-blue">+4.02pp</div>
+          <div class="pm-key">访购率最高</div>
+        </div>
+        <div class="pm">
+          <div class="pm-val text-yellow">+14.4pp</div>
+          <div class="pm-key">千人曝光销售额最高</div>
+        </div>
+        <div class="pm">
+          <div class="pm-val text-red">20+</div>
+          <div class="pm-key">分3期上线子项</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- P1 难点与解法（完整，撑满剩余空间） -->
+    <div class="proj-challenge-wrap reveal d4">
+      <div class="proj-section-label highlight">难点与解法</div>
+      <div class="proj-challenge">
+        <div class="proj-challenge-item">
+          <strong>1）如何从 0 验证 AI 能力落地可行性</strong>
+          <span class="proj-challenge-body">MVP 阶段优先选择「村镇用户找品」场景，以语音搜索解决不会打字、找品难的问题，最小化迁移成本，快速验证可行性。</span>
+        </div>
+        <div class="proj-challenge-item">
+          <strong>2）如何从单点功能扩展为全链路 AI 购物闭环</strong>
+          <span class="proj-challenge-body">验证可行性后，逐步迭代升级为全链路导购，延伸至商详等决策场景，建立覆盖找品→决策→下单的完整 AI 购物链路。</span>
+        </div>
+        <div class="proj-challenge-item">
+          <strong>3）如何在不打扰用户的前提下提升介入效果</strong>
+          <span class="proj-challenge-body">探索多种梯度入口与对话卡片形态，在用户需要时轻量介入，结合使用数据持续调优触发时机与展示样式。</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- 右侧：方案图片区域（全高） -->
+  <div class="proj-right">
+    <div class="proj-visual">
+      <div class="pv-grid">
+        <div class="pv-cell bar-blue"></div>
+        <div class="pv-cell bar-yellow"></div>
+        <div class="pv-cell" style="background:#e8e8e8"></div>
+        <div class="pv-cell bar-red"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="slide-num">04 / 05</div>
+</section>
+
+
+<!-- ════════════════════════════════════════
+     SLIDE 5 · 其他项目
+════════════════════════════════════════ -->
+<section class="slide" id="s5">
+
+  <div class="s5-header">
+    <h2 class="s5-title reveal">Other<br><span style="color:var(--red)">Projects</span></h2>
+    <span class="s2-section-label">05</span>
+  </div>
+
+  <div class="s5-cards" style="grid-template-columns:1fr 1fr 1fr;">
+
+    <!-- 项目①：线上商城选购体验升级 -->
+    <div class="s5-card reveal d1">
+      <div class="s5-card-num">01</div>
+      <div class="s5-stripe bar-blue"></div>
+      <div class="s5-card-title">线上商城<br>选购体验升级</div>
+      <p class="s5-card-desc">
+        美团优选从交易效率转向体验精细化运营阶段，从「有需要才来买」升级为「让用户愿意逛、逛了就想买」。挖掘出场域串联、商品关联售卖、商品内容化 3 大「多逛多买」方向，落地 16 个需求。
+      </p>
+      <div class="s5-card-metrics">
+        <div class="s5-metric">
+          <div class="s5-metric-val text-blue">+1.75pp</div>
+          <div class="s5-metric-key">访购率最高</div>
+        </div>
+        <div class="s5-metric">
+          <div class="s5-metric-val text-yellow">+13.76pp</div>
+          <div class="s5-metric-key">销售额最高</div>
+        </div>
+      </div>
+      <div class="s5-tags">
+        <span class="s5-tag">选购体验</span>
+        <span class="s5-tag">精细化运营</span>
+      </div>
+    </div>
+
+    <!-- 项目②：小象超市线下门店终端0-1建设 -->
+    <div class="s5-card reveal d2">
+      <div class="s5-card-num">02</div>
+      <div class="s5-stripe bar-yellow"></div>
+      <div class="s5-card-title">线下门店终端<br>0-1 建设</div>
+      <p class="s5-card-desc">
+        小象超市线下门店开业，从 0-1 建设小象超市及快乐猴线下收银台终端，完成自助收银、人工收银、POS 收银 3 套终端界面建设并上线，支撑线下业务落地。
+      </p>
+      <div class="s5-card-metrics">
+        <div class="s5-metric">
+          <div class="s5-metric-val text-yellow">95.7%</div>
+          <div class="s5-metric-key">自助收银成功率</div>
+        </div>
+        <div class="s5-metric">
+          <div class="s5-metric-val text-blue">+3.7pp</div>
+          <div class="s5-metric-key">高于竞品</div>
+        </div>
+      </div>
+      <div class="s5-tags">
+        <span class="s5-tag">线下终端</span>
+        <span class="s5-tag">0 → 1</span>
+      </div>
+    </div>
+
+    <!-- 项目③：小象超市商品信息决策树研究 -->
+    <div class="s5-card reveal d3">
+      <div class="s5-card-num">03</div>
+      <div class="s5-stripe bar-lgray"></div>
+      <div class="s5-card-title">商品信息<br>决策树研究</div>
+      <p class="s5-card-desc">
+        小象超市重点发展自营品（PB品），但商品信息长期以生产导向为主，卖点表达与用户真实决策因子脱节。构建用户商品信息决策树，识别核心决策因子，通过全链路设计表达优化，帮助用户高效完成购买决策。
+      </p>
+      <div class="s5-card-metrics">
+        <div class="s5-metric">
+          <div class="s5-metric-val" style="color:var(--black)">SOP</div>
+          <div class="s5-metric-key">沉淀单品决策树建设</div>
+        </div>
+        <div class="s5-metric">
+          <div class="s5-metric-val" style="color:var(--black)">用研</div>
+          <div class="s5-metric-key">问卷+用户验证</div>
+        </div>
+      </div>
+      <div class="s5-tags">
+        <span class="s5-tag">用户研究</span>
+        <span class="s5-tag">PB品</span>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="s5-footer">
+    <div class="s5-footer-name">YE YONG TING · Product Designer</div>
+    <div class="s5-footer-right">© 2025 · 美团 · 设计 L8</div>
+  </div>
+
+  <div class="slide-num">05 / 05</div>
+</section>
+
+
+<!-- ════════════════════════════════════════
+     JAVASCRIPT
+════════════════════════════════════════ -->
+<script>
+/* === Slide observer + nav dots === */
+const slides = document.querySelectorAll('.slide');
+const dots   = document.querySelectorAll('.dot');
+
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      const idx = [...slides].indexOf(entry.target);
+      // Activate slide animations
+      entry.target.classList.add('visible');
+      // Update nav dots
+      dots.forEach((d, i) => d.classList.toggle('active', i === idx));
+    }
+  });
+}, { threshold: 0.5 });
+
+slides.forEach(s => observer.observe(s));
+
+/* === Nav dot click === */
+dots.forEach(dot => {
+  dot.addEventListener('click', () => {
+    const idx = parseInt(dot.dataset.target);
+    slides[idx].scrollIntoView({ behavior: 'smooth' });
+  });
+});
+
+/* === Keyboard navigation === */
+document.addEventListener('keydown', e => {
+  const current = [...slides].findIndex(s => {
+    const r = s.getBoundingClientRect();
+    return r.top >= -50 && r.top < window.innerHeight / 2;
+  });
+  if (e.key === 'ArrowDown' || e.key === ' ' || e.key === 'ArrowRight') {
+    e.preventDefault();
+    if (current < slides.length - 1) slides[current + 1].scrollIntoView({ behavior: 'smooth' });
+  }
+  if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
+    e.preventDefault();
+    if (current > 0) slides[current - 1].scrollIntoView({ behavior: 'smooth' });
+  }
+});
+</script>
+
+</body>
+</html>
