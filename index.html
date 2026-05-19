@@ -433,7 +433,9 @@ body { background: var(--white); color: var(--black); font-family: var(--font-bo
   gap: 12px;
   padding: clamp(16px, 3vh, 40px) var(--slide-padding);
   padding-right: calc(var(--slide-padding) * 0.7);
-  overflow: hidden;
+  overflow-y: auto;
+  overflow-x: hidden;
+  min-height: 0;
 }
 .proj-eyebrow {
   display: flex;
@@ -533,6 +535,10 @@ body { background: var(--white); color: var(--black); font-family: var(--font-bo
   display: block;
   margin-top: 0.15em;
   padding-left: 1.6em;
+}
+/* AI 助手项目的正文字体单独设为 9px */
+#ai-helper-challenge .proj-challenge-body {
+  font-size: 9px;
 }
 .proj-challenge-item:last-child { border-bottom: none; }
 .p-tag {
