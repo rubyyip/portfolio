@@ -485,14 +485,14 @@ body { background: var(--white); color: var(--black); font-family: var(--font-bo
 }
 /* 难点与解法整体容器 — 撑满剩余高度 */
 .proj-challenge-wrap {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  min-height: 0;
-  background: transparent;
-  padding: 0;
-  overflow: visible;
-  margin-top: 12px;
+flex: 1;
+display: flex;
+flex-direction: column;
+min-height: 0;
+background: transparent;
+padding: 0;
+overflow: visible;
+margin-top: 12px;
 }
 .proj-challenge-wrap .proj-section-label {
   margin-top: 0;
@@ -511,7 +511,8 @@ body { background: var(--white); color: var(--black); font-family: var(--font-bo
   flex-direction: column;
   justify-content: flex-start;
   gap: 0;
-  overflow: hidden;
+  overflow-y: auto;
+  overflow-x: hidden;
   min-height: 0;
 }
 .proj-challenge-item {
@@ -536,7 +537,6 @@ body { background: var(--white); color: var(--black); font-family: var(--font-bo
   margin-top: 0.15em;
   padding-left: 1.6em;
 }
-
 .proj-challenge-item:last-child { border-bottom: none; }
 .p-tag {
   padding: 4px 12px;
@@ -792,7 +792,6 @@ body { background: var(--white); color: var(--black); font-family: var(--font-bo
 }
 
 </style>
-<!-- Updated: 2026-05-19 19:33:17 -->
 </head>
 <body>
 <div id="slide-wrapper">
@@ -970,16 +969,16 @@ body { background: var(--white); color: var(--black); font-family: var(--font-bo
       <div class="proj-section-label highlight">难点与解法</div>
       <div class="proj-challenge" id="ai-helper-challenge">
         <div class="proj-challenge-item">
-          <strong>1）AI 助手对业务是全新能力，切入场景会影响验证成本和后续扩展——需要找到一个足够小、问题足够真实的场景先跑通</strong>
+          <strong>1）AI 助手对业务是全新能力，需要选择合适的切入场景。</strong>
           <span class="proj-challenge-body">通过用户调研和Session 分析洞察，辅助产品验证"村镇用户*语音找品"的切入场景。</span>
         </div>
         <div class="proj-challenge-item">
           <strong>2）用户表达天然模糊，大模型难以理解用户真实需求。</strong>
-          <span class="proj-challenge-body">在语音购物场景探索中，我们发现用户很少能够清晰的表达表达需求，例如会说： "想买那个一毛钱那个东西那都有什么东西我要看看那个" "喂你好我就是办了鸡爪子嗯蓝莓买了单买了几样东西怎么给我扣了一百一十七块钱那是买了什么东西啊" "老板昨天我买了大蒜子全部都是坏的怎么办哦" 虽然都是一句话，但背后对应不同的选购目标和决策逻辑。通过用户调研、Session分析及行为数据分析，将用户选购行为归纳为找低价、找订单、找客服、相似品对比、找商品信息等10+类核心意图，助力产品和算法团队建立统一的意图理解框架，为后续AI找品与导购能力建设提供依据。</span>
+          <span class="proj-challenge-body">通过用户语音原声分析，将用户选购行为归纳为10+类核心意图，助力产品和算法团队建立意图理解框架。用户原声："喂你好我就是办了鸡爪子嗯蓝莓买了单买了几样东西怎么给我扣了一百一十七块钱那是买了什么东西啊" —— 找订单；"老板昨天我买了大蒜子全部都是坏的怎么办哦" —— 找客服售后；"想买那个一毛钱那个东西那都有什么东西我要看看那个" —— 找低价商品。</span>
         </div>
         <div class="proj-challenge-item">
-          <strong>3）用户已形成稳定购物习惯，缺乏主动切换至 AI 的动机——需要探索顺应用户习惯的 AI 助手形态</strong>
-          <span class="proj-challenge-body">AI 助手不仅需要"回答正确"，还需要在正确的时机出现，并以用户更容易理解的方式呈现结果。 因此针对 AI 助手入口、对话卡片等关键触点，探索多种梯度的呈现形态。 例如： • 在用户决策更强的商详场景中嵌入 AI 入口； • 针对"配料是什么"等事实查询类问题，优先展示图片和结构化信息； • 针对"甜不甜""值不值得买"等决策类问题，优先展示评价总结和比例信息。 通过在用户需要帮助的节点轻量介入，逐步提升 AI 助手的感知度和使用率。</span>
+          <strong>3）AI 输出内容需要匹配合适的呈现形式，否则用户难以快速获取关键信息。</strong>
+          <span class="proj-challenge-body">针对不同问题类型，探索差异化卡片形态，让AI 输出有效传达：例如"酱油配料成分"优先展示图片，"苹果甜不甜"优先展示数字占比和评价总结。</span>
         </div>
       </div>
     </div>
@@ -1054,16 +1053,16 @@ body { background: var(--white); color: var(--black); font-family: var(--font-bo
       <div class="proj-section-label highlight">难点与解法</div>
       <div class="proj-challenge">
         <div class="proj-challenge-item">
-          <strong>1）售后规则复杂，直接透传业务规则，容易导致用户难理解。</strong>
-          <span class="proj-challenge-body">按用户所在节点差异化透出规则，并从用户视角转译文案，例如把售后规则转译为服务保障。</span>
+          <strong>1）在复杂售后场景下，售后规则透出越完整，用户越看不懂——需要规则转译为用户可理解的语言，在正确节点传递正确信息，而非全量推给用户。</strong>
+          <span class="proj-challenge-body">通过建立全流程规则透出框架、识别用户最焦虑的节点、针对性做差异化设计，降低用户门槛、帮助用户理解平台规则。例如：美团优选售后规则，送达前以可视化图表形式展示、送达后以保障形式展示。</span>
         </div>
         <div class="proj-challenge-item">
-          <strong>2）用户对售后满意度，更多取决于过程中的情绪体验，而非结果本身。</strong>
-          <span class="proj-challenge-body">定位退款流程情绪低谷，用情感化文案、情绪出口、动效、等手段，让用户感受到"事情在推进"，在结果不变的前提下缓解焦虑（当前在小象超市探索中）。</span>
+          <strong>2）用户对售后结果的满意度，更多取决于过程中的情绪体验，而不只是结果本身——需要安抚用户情绪，而非仅做基础功能优化。</strong>
+          <span class="proj-challenge-body">通过拆解退款全流程的情绪曲线，定位用户情绪低谷节点，针对性地用情感化文案、情绪出口设计、动效反馈等手段，在结果不变的前提下，让用户感受到"事情在推进、平台在处理"，缓解焦虑、提升满意度。由于美团优选业务关停，当前在小象超市业务探索中。</span>
         </div>
         <div class="proj-challenge-item">
-          <strong>3）售后表单填写门槛高，传统流程优化空间有限。</strong>
-          <span class="proj-challenge-body">引入 AI 识别用户照片、自动填充表单，帮助用户更低门槛完成售后申请（当前在小象超市探索中）。</span>
+          <strong>3）售后表单填写门槛高，传统填写流程优化空间有限——需要探索AI应用，构建新路径。</strong>
+          <span class="proj-challenge-body">通过引入AI识别用户照片、AI自动填充表单等方式，帮助用户更低门槛的完成售后申请。由于美团优选业务关停，当前在小象超市业务探索中。</span>
         </div>
       </div>
     </div>
@@ -1122,7 +1121,7 @@ body { background: var(--white); color: var(--black); font-family: var(--font-bo
       </div>
       <!-- 左列图片 -->
       <div class="s56-thumb reveal d3" style="background:#1F2326;" onclick="openLightbox('images/选购优化.png')" role="img" aria-label="选购体验升级设计产出">
-        <img src="images/选购优化.png" alt="选购体验升级">
+        <img src="images/选购优化.png" alt="选购体验升级" loading="lazy" decoding="async">
       </div>
     </div>
 
@@ -1160,7 +1159,7 @@ body { background: var(--white); color: var(--black); font-family: var(--font-bo
       </div>
       <!-- 右列图片 -->
       <div class="s56-thumb reveal d3" style="background:#E8E8EA;" onclick="openLightbox('images/收银台.png')" role="img" aria-label="门店终端界面设计">
-        <img src="images/收银台.png" alt="门店终端0-1建设">
+        <img src="images/收银台.png" alt="门店终端0-1建设" loading="lazy" decoding="async">
       </div>
     </div>
 
@@ -1283,4 +1282,3 @@ document.addEventListener('keydown', function(e) {
 
 </body>
 </html>
-<!-- Updated: Tue May 19 18:56:53 CST 2026 -->
